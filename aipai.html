@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>帮助中心 · 阿派平台 | 找小队 & 需求市场指南</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f9ff;
+            color: #0a2540;
+            line-height: 1.5;
+        }
+        .header {
+            background: white;
+            border-bottom: 1px solid #eef2f8;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #0055ff, #7c3aed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-link {
+            color: #4a5b7a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        .search-section {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid #eef2f8;
+            margin-bottom: 2rem;
+        }
+        .search-section h1 {
+            font-size: 1.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .search-box {
+            max-width: 600px;
+            margin: 1.5rem auto 0;
+            display: flex;
+            background: #f8fafd;
+            border-radius: 60px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 0.9rem 1.5rem;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+        }
+        .search-box button {
+            background: #0055ff;
+            border: none;
+            padding: 0 1.8rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .module-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid #eef2f8;
+            transition: 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 22px -12px rgba(0,0,0,0.1);
+            border-color: #d0e0ff;
+        }
+        .hot-badge {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: #ff5e7c;
+            color: white;
+            font-size: 0.6rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+        }
+        .topic-area {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            margin: 1.5rem 0;
+            border: 1px solid #eef2f8;
+            display: none;
+        }
+        .topic-area.active-topic {
+            display: block;
+        }
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eef2f8;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .question-item {
+            background: #fafcff;
+            padding: 0.9rem 1rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            border-left: 3px solid #0055ff;
+            transition: 0.1s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .question-item:hover {
+            background: #f0f4fe;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            max-width: 750px;
+            width: 90%;
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .feedback-panel {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            margin-top: 2rem;
+            border: 1px solid #eef2f8;
+        }
+        .feedback-form input, .feedback-form select, .feedback-form textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            margin: 0.5rem 0 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: #0055ff;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6c86a3;
+            font-size: 0.8rem;
+        }
+        .tag {
+            font-size: 0.7rem;
+            background: #eef2ff;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+        }
+        .step-demo {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-left: 4px solid #0055ff;
+        }
+        .screenshot-inline {
+            margin: 1rem 0;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        .screenshot-title {
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f1f5f9;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .screenshot-img {
+            width: 100%;
+            max-height: 360px;
+            object-fit: contain;
+            background: #ffffff;
+            display: block;
+        }
+        .badge-new {
+            background: #10b981;
+            color: white;
+            font-size: 0.6rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            margin-left: 0.5rem;
+        }
+        @media (max-width: 680px) {
+            .modules-grid { grid-template-columns: 1fr; }
+            .modal-content { width: 95%; padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo"><i class="fas fa-life-ring"></i> 阿派帮助中心</div>
+    <a href="#" class="nav-link" id="mainHomeLink">← 返回平台</a>
+</div>
+
+<div class="container">
+    <div class="search-section">
+        <h1>👋 你好，需要什么帮助？</h1>
+        <p>搜索问题关键词，或者直接浏览下方常见模块</p>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="例如：如何接单、忘记密码、快速上手...">
+            <button id="searchBtn"><i class="fas fa-search"></i> 搜索</button>
+        </div>
+        <div id="searchResultHint" style="margin-top: 0.8rem; font-size:0.85rem; color:#5b6e8c;"></div>
+    </div>
+
+    <div class="modules-grid" id="modulesGrid"></div>
+
+    <div id="topicContainer" class="topic-area">
+        <div class="topic-header">
+            <h2 id="topicTitle">快速上手</h2>
+            <button class="btn-outline" id="closeTopicBtn"><i class="fas fa-times"></i> 收起</button>
+        </div>
+        <div id="questionList" class="question-list"></div>
+    </div>
+
+    <div class="feedback-panel" id="feedbackSection">
+        <h3><i class="fas fa-bug"></i> 没找到答案？提交问题反馈</h3>
+        <p>若您的问题未在列表中找到，请填写下表，我们会尽快处理。</p>
+        <div class="feedback-form">
+            <input type="text" id="fbTitle" placeholder="问题标题 *">
+            <select id="fbType">
+                <option value="快速上手">快速上手/AI创作</option>
+                <option value="账号问题">账号与登录</option>
+                <option value="找小队">找小队</option>
+                <option value="发布需求">发布需求</option>
+                <option value="接需求">接需求</option>
+                <option value="交易与资金">交易与资金</option>
+                <option value="作品展示">作品展示</option>
+                <option value="平台规则信用">平台规则与信用</option>
+                <option value="其他">其他问题</option>
+            </select>
+            <textarea id="fbDesc" rows="3" placeholder="详细描述您遇到的问题..."></textarea>
+            <input type="text" id="fbContact" placeholder="联系方式（选填）">
+            <button class="btn-primary" id="submitFeedbackBtn"><i class="fas fa-paper-plane"></i> 提交反馈</button>
+            <div id="feedbackMsg" style="margin-top: 0.5rem; font-size:0.8rem;"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <i class="fas fa-handshake"></i> 阿派平台 · 帮助中心 | 找小队 ｜ 发布需求 ｜ 接单获利
+</footer>
+
+<div id="answerModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeModalBtn">&times;</span>
+        <h3 id="modalQuestion">问题</h3>
+        <div id="modalAnswer" style="margin-top: 1rem; line-height: 1.6;"></div>
+    </div>
+</div>
+
+<script>
+    // 您提供的真实图片链接（已更新 help-workspace.jpg）
+    const IMG_URLS = {
+        home: "https://fangtang1-oss.oss-cn-hangzhou.aliyuncs.com/resources/sites/html/help-home.png",
+        bind: "https://fangtang1-oss.oss-cn-hangzhou.aliyuncs.com/resources/sites/html/help-bind.png",
+        workspace: "https://fangtang1-oss.oss-cn-hangzhou.aliyuncs.com/resources/sites/html/help-workspace.jpg",
+        chat: "https://fangtang1-oss.oss-cn-hangzhou.aliyuncs.com/resources/sites/html/help-chat.jpg",
+        market: "https://fangtang1-oss.oss-cn-hangzhou.aliyuncs.com/resources/sites/html/help-market.png"
+    };
+
+    // 生成带真实图片的HTML块（点击图片在新窗口打开）
+    const screenshotHome = `<div class="screenshot-inline" onclick="window.open('${IMG_URLS.home}', '_blank')"><div class="screenshot-title"><i class="fas fa-home"></i> 首页 · 从点子到可运行的AI作品</div><img class="screenshot-img" src="${IMG_URLS.home}" alt="首页输入点子" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="screenshot-title" style="border-top:1px solid #e2e8f0; border-bottom:none;"><i class="fas fa-hand-pointer"></i> 点击图片可放大查看</div></div>`;
+    const screenshotBindPhone = `<div class="screenshot-inline" onclick="window.open('${IMG_URLS.bind}', '_blank')"><div class="screenshot-title"><i class="fas fa-mobile-alt"></i> 绑定手机 · 保障账号安全</div><img class="screenshot-img" src="${IMG_URLS.bind}" alt="绑定手机界面" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="screenshot-title" style="border-top:1px solid #e2e8f0; border-bottom:none;"><i class="fas fa-hand-pointer"></i> 点击图片可放大查看</div></div>`;
+    const screenshotWorkspace = `<div class="screenshot-inline" onclick="window.open('${IMG_URLS.workspace}', '_blank')"><div class="screenshot-title"><i class="fas fa-layer-group"></i> 创作空间 · 我的作品</div><img class="screenshot-img" src="${IMG_URLS.workspace}" alt="创作空间作品列表" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="screenshot-title" style="border-top:1px solid #e2e8f0; border-bottom:none;"><i class="fas fa-hand-pointer"></i> 点击图片可放大查看</div></div>`;
+    const screenshotChat = `<div class="screenshot-inline" onclick="window.open('${IMG_URLS.chat}', '_blank')"><div class="screenshot-title"><i class="fas fa-comments"></i> AI对话 · 完善项目细节</div><img class="screenshot-img" src="${IMG_URLS.chat}" alt="AI对话界面" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="screenshot-title" style="border-top:1px solid #e2e8f0; border-bottom:none;"><i class="fas fa-hand-pointer"></i> 点击图片可放大查看</div></div>`;
+    const screenshotMarket = `<div class="screenshot-inline" onclick="window.open('${IMG_URLS.market}', '_blank')"><div class="screenshot-title"><i class="fas fa-store"></i> 作品市场 · 浏览与复用</div><img class="screenshot-img" src="${IMG_URLS.market}" alt="作品市场界面" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="screenshot-title" style="border-top:1px solid #e2e8f0; border-bottom:none;"><i class="fas fa-hand-pointer"></i> 点击图片可放大查看</div></div>`;
+
+    // 帮助数据结构
+    const quickStartModule = {
+        name: "🚀 快速上手 · AI创作空间",
+        icon: "fas fa-rocket",
+        questions: [
+            { q: "✨ 如何从「点子」到作品？输入想法后怎么和AI协作？", 
+              a: `<div class="step-demo"><i class="fas fa-lightbulb"></i> <strong>第一步：输入点子</strong><br>在平台首页的输入框中用一句话描述您的想法，系统会自动匹配最适合的AI助手。</div>${screenshotHome}<div class="step-demo"><i class="fas fa-comments"></i> <strong>第二步：进入创作空间，开始对话</strong><br>点击生成后自动进入专属创作空间。像聊天一样告诉AI更详细的需求。</div>${screenshotChat}<div class="step-demo"><i class="fas fa-sync-alt"></i> <strong>第三步：多轮迭代与完善</strong><br>对AI产出的内容提出修改建议，AI会实时调整版本。支持草图 → 预览版本 → 完整作品。</div><div class="step-demo"><i class="fas fa-save"></i> <strong>第四步：保存与版本管理</strong><br>随时保存进度，所有对话历史自动记录。可随时回到某个版本继续优化。</div><div class="step-demo"><i class="fas fa-share-alt"></i> <strong>💡 小贴士</strong><br>不要担心描述不完美，AI会理解您的意图。可以从简单功能开始，逐步添加复杂特性。</div>` },
+            { q: "🎨 如何利用AI助手完善我的项目细节？", 
+              a: `在创作空间中，您可以直接向AI提出具体优化需求：<br><br><strong>• 功能增加：</strong> “添加用户登录页面” / “增加数据统计图表”<br><strong>• 样式调整：</strong> “把按钮改成圆角渐变风格” / “使用毛玻璃效果”<br><strong>• 代码优化：</strong> “重构这个函数，提高性能” / “添加错误处理机制”<br><strong>• 内容生成：</strong> “帮我写关于这个工具的简介文案” / “生成几组示例数据”<br><br>AI会根据您的描述实时修改并展示效果。${screenshotChat}<div style="background:#eef2ff; padding:0.8rem; border-radius:1rem; margin-top:0.5rem;"><i class="fas fa-info-circle"></i> 提示：会话界面中可以直接说“改一下配色”或“增加一个评论功能”</div>` },
+            { q: "📁 创作空间内的项目如何管理和继续编辑？", 
+              a: `所有项目会自动保存在您的个人账户中。<br><br><strong>• 查看项目列表：</strong> 首页点击“进入创作空间” → 项目列表。<br><strong>• 继续编辑：</strong> 点击任意项目卡片，回到上次对话环境，可直接延续开发。<br><strong>• 版本回溯：</strong> 每个项目都保存了历史快照。<br><strong>• 作品发布：</strong> 完成后可选择「发布到作品市场」或「私有保存」。${screenshotWorkspace}` },
+            { q: "🤖 平台有哪些热门AI助手？作品市场怎么用？", 
+              a: `平台提供多种垂直领域的AI助手，您可以在「作品市场」中浏览和复用：<br><br><strong>• 短视频文案助手：</strong> 快速生成爆款脚本、标题，适合自媒体创作。<br><strong>• 软件架构助手：</strong> 提供系统设计建议、技术选型。<br><strong>• 个人博客搭建助手：</strong> 一键生成博客框架。<br><strong>• 简历技能优化助手：</strong> 优化简历表达。<br><br>${screenshotMarket}<div class="step-demo"><i class="fas fa-hand-pointer"></i> 点击「查看详情」可了解作品功能，点击「加入我的作品」可保存到个人空间二次修改。</div>` }
+        ]
+    };
+
+    const accountModule = {
+        icon: "fas fa-user-circle",
+        questions: [
+            { q: "如何注册账号？", a: `点击首页右上角「注册」，使用手机号或邮箱完成注册，输入验证码并设置密码即可。<br>${screenshotBindPhone}<br>绑定手机号可提升账号安全性，便于找回密码。` },
+            { q: "忘记密码怎么办？", a: "登录页点击「忘记密码」，通过绑定的手机号或邮箱验证，重置密码。" },
+            { q: "账号锁定或封禁怎么办？", a: "若账号异常，请联系客服邮箱 team@fang-tang.cn 或提交工单，提供注册信息进行申诉。" }
+        ]
+    };
+
+    const otherHelpData = {
+        "找小队": { icon: "fas fa-users", questions: [
+            { q: "如何发布找小队的招募信息？", a: "进入「找小队」页面 → 点击「发布招募」→ 填写项目简介、所需角色、联系方式，提交后等待申请。" },
+            { q: "如何搜索和筛选想加入的小队？", a: "在找小队列表中使用关键词搜索（如“前端开发”）并按技能/项目类型筛选，点击查看详情。" },
+            { q: "如何申请加入别人的小队？", a: "打开小队详情页 → 点击「申请加入」→ 填写自我介绍及能力证明，队长审核后即可加入。" }
+        ] },
+        "发布需求": { icon: "fas fa-bullhorn", questions: [
+            { q: "如何发布一个需求？需要填写哪些信息？", a: "点击「发需求」→ 填写需求标题、预算、截止时间、详细描述、所需技能标签，支持上传附件。" },
+            { q: "如何筛选和选择接单者？", a: "需求发布后，会在接单列表中展示申请者，可以查看对方作品/信用分，通过站内信沟通后确认合作。" },
+            { q: "如何确认需求完成并支付？", a: "接单者提交成果后，需求方验收，点击「确认完成」即冻结金额自动释放给接单者，交易完成。" }
+        ] },
+        "接需求": { icon: "fas fa-hand-holding-usd", questions: [
+            { q: "如何浏览和搜索需求市场？", a: "进入「接需求」板块，可按分类、预算、时间筛选，关键字搜索快速定位适合自己的项目。" },
+            { q: "如何申请接单？需要提交什么？", a: "点击需求卡片「申请接单」，提交简短方案或个人作品集链接，需求方会查看并联系您。" },
+            { q: "接单后被拒绝了怎么办？", a: "拒绝后不影响信用，可继续申请其他需求，建议完善个人资料和过往作品提高通过率。" },
+            { q: "如何与需求方沟通确认细节？", a: "接单成功后可通过平台内置聊天工具沟通，保留关键确认记录，避免纠纷。" },
+            { q: "如何提交完成的作品/成果？", a: "在订单详情页上传最终文件或部署链接，点击「提交审核」，需求方验收。" },
+            { q: "如何获得报酬？平台如何结算？", a: "需求方确认完成后，资金自动划入您的余额，可提现至支付宝/微信，T+1到账。" },
+            { q: "接单后无法完成怎么办？", a: "请主动联系需求方协商延期或取消订单；频繁取消会影响信用分。" }
+        ] },
+        "交易与资金": { icon: "fas fa-coins", questions: [
+            { q: "平台如何保障资金安全？", a: "平台采用担保交易，需求方预先托管资金，验收后自动结算，保障双方权益。" },
+            { q: "平台会收取多少服务费/佣金？", a: "目前针对接单方收取5%佣金，需求方免服务费；具体以平台公告为准。" },
+            { q: "如何提现？多久到账？", a: "进入「我的钱包」→ 申请提现，单笔最低10元，1-2个工作日到账。" }
+        ] },
+        "作品展示": { icon: "fas fa-star", questions: [
+            { q: "如何展示自己的作品/案例？", a: `个人中心→「我的作品」→ 上传作品封面、简介、链接，通过审核后展示在个人主页。<br>${screenshotWorkspace}<br>作品市场可让更多人看到您的创作。` },
+            { q: "如何给别人的作品点赞/评论？", a: `浏览作品市场时，点击作品详情底部「❤️ 点赞」或「💬 评论」，需登录后操作。<br>${screenshotMarket}` }
+        ] },
+        "平台规则与信用": { icon: "fas fa-shield-alt", questions: [
+            { q: "平台的信用评分机制是怎样的？", a: "完成交易后双方互评；按时交付、好评增加信用分，违约或纠纷会降低信用等级。" },
+            { q: "违规行为有哪些？会被怎么处理？", a: "恶意刷单、虚假需求、抄袭作品等将封禁账号，扣除保证金并公示。" }
+        ] }
+    };
+
+    // 合并所有模块，快速上手置顶
+    const allModules = {
+        "快速上手": quickStartModule,
+        "账号与登录": accountModule,
+        ...otherHelpData
+    };
+
+    function renderModules() {
+        const grid = document.getElementById('modulesGrid');
+        grid.innerHTML = '';
+        for (const [moduleName, moduleData] of Object.entries(allModules)) {
+            const card = document.createElement('div');
+            card.className = 'module-card';
+            if (moduleName === '快速上手') {
+                card.innerHTML += '<div class="hot-badge"><i class="fas fa-fire"></i> 新手必看</div>';
+            }
+            card.setAttribute('data-module', moduleName);
+            card.innerHTML += `
+                <div class="module-icon"><i class="${moduleData.icon}"></i></div>
+                <h3>${moduleName}</h3>
+                <p>${moduleData.questions.length}个常见问题</p>
+            `;
+            card.addEventListener('click', () => showTopic(moduleName));
+            grid.appendChild(card);
+        }
+    }
+
+    function showTopic(moduleName) {
+        const topicArea = document.getElementById('topicContainer');
+        const titleEl = document.getElementById('topicTitle');
+        const listContainer = document.getElementById('questionList');
+        const moduleData = allModules[moduleName];
+        if (!moduleData) return;
+        titleEl.innerHTML = moduleName === '快速上手' ? '<i class="fas fa-rocket" style="color:#0055ff;"></i> ' + moduleName : moduleName;
+        listContainer.innerHTML = '';
+        moduleData.questions.forEach((item) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-item';
+            qDiv.innerHTML = `<span><i class="fas fa-question-circle" style="color:#0055ff;"></i> ${item.q}</span> <span class="tag">查看答案 <i class="fas fa-chevron-right"></i></span>`;
+            qDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showAnswer(item.q, item.a);
+            });
+            listContainer.appendChild(qDiv);
+        });
+        topicArea.classList.add('active-topic');
+        topicArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showAnswer(question, answer) {
+        const modal = document.getElementById('answerModal');
+        document.getElementById('modalQuestion').innerHTML = `<i class="fas fa-comment-dots"></i> ${question}`;
+        document.getElementById('modalAnswer').innerHTML = `<div style="background:#f8fafc; padding:0.8rem; border-radius:1rem;">${answer}</div>`;
+        modal.style.display = 'flex';
+    }
+
+    function performSearch() {
+        const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+        const hintDiv = document.getElementById('searchResultHint');
+        if (keyword === '') { hintDiv.innerHTML = ''; return; }
+        let results = [];
+        for (const [moduleName, moduleData] of Object.entries(allModules)) {
+            moduleData.questions.forEach(qItem => {
+                if (qItem.q.toLowerCase().includes(keyword) || qItem.a.toLowerCase().includes(keyword)) {
+                    results.push({ module: moduleName, question: qItem.q, answer: qItem.a });
+                }
+            });
+        }
+        if (results.length === 0) {
+            hintDiv.innerHTML = '<span style="color:#e67e22;"><i class="fas fa-info-circle"></i> 未找到相关问题，试试其他关键词或提交反馈</span>';
+            return;
+        }
+        hintDiv.innerHTML = `<span style="color:#10b981;"><i class="fas fa-check-circle"></i> 找到 ${results.length} 条相关结果，点击查看：</span><br>`;
+        results.forEach(res => {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.style.display = 'inline-block';
+            link.style.margin = '4px 8px 0 0';
+            link.style.fontSize = '0.8rem';
+            link.style.background = '#eef2ff';
+            link.style.padding = '0.2rem 0.7rem';
+            link.style.borderRadius = '20px';
+            link.style.textDecoration = 'none';
+            link.style.color = '#0055ff';
+            link.innerText = `📘 ${res.question}`;
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showAnswer(res.question, res.answer);
+            });
+            hintDiv.appendChild(link);
+        });
+    }
+
+    function submitFeedback() {
+        const title = document.getElementById('fbTitle').value.trim();
+        const desc = document.getElementById('fbDesc').value.trim();
+        const msgDiv = document.getElementById('feedbackMsg');
+        if (!title || !desc) {
+            msgDiv.innerHTML = '<span style="color:#dc2626;">请填写问题标题和描述</span>';
+            return;
+        }
+        msgDiv.innerHTML = '<span style="color:#10b981;">✅ 反馈已提交，感谢您的建议！团队会尽快处理。</span>';
+        document.getElementById('fbTitle').value = '';
+        document.getElementById('fbDesc').value = '';
+        document.getElementById('fbContact').value = '';
+        setTimeout(() => msgDiv.innerHTML = '', 3000);
+    }
+
+    function closeTopicArea() { document.getElementById('topicContainer').classList.remove('active-topic'); }
+
+    document.getElementById('closeTopicBtn').addEventListener('click', closeTopicArea);
+    document.getElementById('searchBtn').addEventListener('click', performSearch);
+    document.getElementById('searchInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+    document.getElementById('submitFeedbackBtn').addEventListener('click', submitFeedback);
+    const modal = document.getElementById('answerModal');
+    document.getElementById('closeModalBtn').addEventListener('click', () => modal.style.display = 'none');
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+    
+    renderModules();
+</script>
+</body>
+</html>
