@@ -26,5 +26,4 @@ jobs:
         run: |
           echo "等待部署完成..."
           sleep 5
-          echo "测试 aipai.html..."
-          curl -f https://cdn.fang-tang.cn/resources/sites/html/aipai.html && echo "✅ 访问成功"
+          curl -f https://cdn.fang-tang.cn/resources/sites/html/aipai.html && echo "✅ 成功"
