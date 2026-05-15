@@ -32,9 +32,13 @@ jobs:
         run: |
           ossutil cp ./ oss://fangtang1-oss/resources/sites/html/ --recursive --force
       
+      - name: 设置 OSS Bucket 为公共读
+        run: |
+          ossutil bucket-acl oss://fangtang1-oss --acl public-read
+      
       - name: 测试线上网站
         run: |
-          echo "等待部署完成..."
+          echo "等待权限生效..."
           sleep 5
           echo "测试 aipai.html..."
           curl -f https://cdn.fang-tang.cn/resources/sites/html/aipai.html && echo "✅ 访问成功"
