@@ -12,29 +12,24 @@ jobs:
       - name: 拉取代码
         uses: actions/checkout@v4
       
-      - name: 安装 ossutil
+      - name: 安装阿里云 CLI
         run: |
-          wget https://gosspublic.alicdn.com/ossutil/1.7.18/ossutil64
-          chmod +x ossutil64
-          sudo mv ossutil64 /usr/local/bin/ossutil
+          curl -fsSL https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz | tar -xz
+          sudo mv aliyun /usr/local/bin/
       
-      - name: 配置 ossutil
+      - name: 配置阿里云 CLI
         run: |
-          cat > ~/.ossutilconfig << EOF
-          [Credentials]
-          language=CH
-          endpoint=oss-cn-hangzhou.aliyuncs.com
-          accessKeyID=${{ secrets.OSS_ACCESS_KEY_ID }}
-          accessKeySecret=${{ secrets.OSS_ACCESS_KEY_SECRET }}
-          EOF
+          aliyun configure set --access-key-id "${{ secrets.OSS_ACCESS_KEY_ID }}"
+          aliyun configure set --access-key-secret "${{ secrets.OSS_ACCESS_KEY_SECRET }}"
+          aliyun configure set --region cn-hangzhou
       
       - name: 上传文件到 OSS
         run: |
-          ossutil cp ./ oss://fangtang1-oss/resources/sites/html/ --recursive --force
+          aliyun oss cp ./ oss://fangtang1-oss/resources/sites/html/ --recursive --force
       
       - name: 设置 OSS Bucket 为公共读
         run: |
-          ossutil set-acl oss://fangtang1-oss public-read --recursive
+          aliyun oss bucket-acl --bucket fangtang1-oss --acl public-read
       
       - name: 测试线上网站
         run: |
