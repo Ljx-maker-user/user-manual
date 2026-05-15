@@ -19,19 +19,16 @@ jobs:
       
       - name: 配置阿里云 CLI
         run: |
-          aliyun configure set \
-            --access-key-id ${{ secrets.OSS_ACCESS_KEY_ID }} \
-            --access-key-secret ${{ secrets.OSS_ACCESS_KEY_SECRET }} \
-            --region cn-hangzhou
+          aliyun configure set --access-key-id "${{ secrets.OSS_ACCESS_KEY_ID }}"
+          aliyun configure set --access-key-secret "${{ secrets.OSS_ACCESS_KEY_SECRET }}"
+          aliyun configure set --region "cn-hangzhou"
       
       - name: 上传文件到 OSS
         run: |
-          # 上传当前目录下所有文件到 OSS 的 resources/sites/html/ 路径
           aliyun oss cp ./ oss://fangtang1-oss/resources/sites/html/ --recursive --force
       
       - name: 测试线上网站
         run: |
           echo "等待部署完成..."
           sleep 5
-          echo "测试 aipai.html..."
           curl -f https://cdn.fang-tang.cn/resources/sites/html/aipai.html && echo "✅ 访问成功"
