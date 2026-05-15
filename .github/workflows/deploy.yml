@@ -12,23 +12,29 @@ jobs:
       - name: 拉取代码
         uses: actions/checkout@v4
       
-      - name: 安装阿里云 CLI
+      - name: 安装 ossutil
         run: |
-          curl -fsSL https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz | tar -xz
-          sudo mv aliyun /usr/local/bin/
+          wget https://gosspublic.alicdn.com/ossutil/1.7.18/ossutil64
+          chmod +x ossutil64
+          sudo mv ossutil64 /usr/local/bin/ossutil
       
-      - name: 配置阿里云 CLI
+      - name: 配置 ossutil
         run: |
-          aliyun configure set --access-key-id "${{ secrets.OSS_ACCESS_KEY_ID }}"
-          aliyun configure set --access-key-secret "${{ secrets.OSS_ACCESS_KEY_SECRET }}"
-          aliyun configure set --region "cn-hangzhou"
+          cat > ~/.ossutilconfig << EOF
+          [Credentials]
+          language=CH
+          endpoint=oss-cn-hangzhou.aliyuncs.com
+          accessKeyID=${{ secrets.OSS_ACCESS_KEY_ID }}
+          accessKeySecret=${{ secrets.OSS_ACCESS_KEY_SECRET }}
+          EOF
       
       - name: 上传文件到 OSS
         run: |
-          aliyun oss cp ./ oss://fangtang1-oss/resources/sites/html/ --recursive --force
+          ossutil cp ./ oss://fangtang1-oss/resources/sites/html/ --recursive --force
       
       - name: 测试线上网站
         run: |
           echo "等待部署完成..."
           sleep 5
+          echo "测试 aipai.html..."
           curl -f https://cdn.fang-tang.cn/resources/sites/html/aipai.html && echo "✅ 访问成功"
