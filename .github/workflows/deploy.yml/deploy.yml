@@ -1,0 +1,30 @@
+name: Deploy to OSS
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+      
+      - name: 上传到阿里云 OSS
+        uses: aliyun/oss-website-action@v1
+        with:
+          access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+          endpoint: oss-cn-hangzhou.aliyuncs.com
+          bucket: fangtang1-oss
+          source-folder: ./
+          target-folder: resources/sites/html/
+      
+      - name: 测试线上网站
+        run: |
+          echo "等待部署完成..."
+          sleep 5
+          echo "测试 aipai.html..."
+          curl -f https://cdn.fang-tang.cn/resources/sites/html/aipai.html && echo "✅ 访问成功"
