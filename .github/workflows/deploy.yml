@@ -28,16 +28,12 @@ jobs:
           accessKeySecret=${{ secrets.OSS_ACCESS_KEY_SECRET }}
           EOF
       
-      - name: 上传文件到 OSS
+      - name: 上传文件到 OSS（直接设为公共读）
         run: |
-          ossutil cp ./ oss://fangtang1-oss/resources/sites/html/ --recursive --force
-      
-      - name: 设置上传的文件为公共读
-        run: |
-          ossutil set-acl oss://fangtang1-oss/resources/sites/html/ public-read --recursive
+          ossutil cp ./ oss://fangtang1-oss/resources/sites/html/ --recursive --force --acl public-read
       
       - name: 测试线上网站
         run: |
-          echo "等待权限生效..."
+          echo "等待部署完成..."
           sleep 5
           curl -f https://cdn.fang-tang.cn/resources/sites/html/aipai.html && echo "✅ 访问成功"
